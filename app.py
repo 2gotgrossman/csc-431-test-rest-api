@@ -88,7 +88,7 @@ def get_image(image_id):
     else:
         file_loc = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'static')
         print("FILE LOCATION", file_loc)
-        return send_file(os.path.join(file_loc, location), as_attachment=True, mimetype='image/jpeg')
+        return send_file(os.path.join(file_loc, location), mimetype='image/jpeg')
 
 
 @app.errorhandler(404)
