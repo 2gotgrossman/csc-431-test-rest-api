@@ -2,7 +2,7 @@ from flask import Flask, jsonify
 from flask import abort
 from flask import make_response
 from flask import request
-from flask import 
+from flask import send_file
 import os
 
 import data
@@ -12,7 +12,7 @@ SUPPORTED_IMAGE_TYPES = ["geo_backscatter", "geo_coherence",
                "geo_interferogram", "ortho_backscatter",
                "ortho_coherence", "ortho_interferogram"]
 
-SUPPORTED_SATELLITES = []
+SUPPORTED_SATELLITES = ['satellite_id0', 'satellite_id1']
 
 app = Flask(__name__)
 
@@ -44,7 +44,7 @@ def get_hazard_info_page(hazard_type, hazard_id):
                         types.add(image_type)
                 if len(types) == 0:
                     abort(400, "None of the following image types are supported: '{0}'".format(str(image_types_requested)))
-
+            print("TYPES:", types)
             # Check that these variables are of the correct type
             satellites_requested = request.args.get('satellites')
             start_date, end_date = request.args.get('start_date'), request.args.get('end_date')
@@ -86,7 +86,7 @@ def get_image(image_id):
     if location is None:
         abort(404, "Image with image id {0} does not exist.".format(str(image_id)))
     else:
-        file_loc = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data_files')
+        file_loc = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'static')
         print("FILE LOCATION", file_loc)
         return send_file(os.path.join(file_loc, location), as_attachment=True, mimetype='image/jpeg')
 
@@ -102,3 +102,4 @@ def bad_request(error):
 
 if __name__ == '__main__':
     app.run(debug=True)
+    #app.run(host="0.0.0.0", port=80)
